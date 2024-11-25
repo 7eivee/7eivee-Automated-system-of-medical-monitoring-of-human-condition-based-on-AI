@@ -1,0 +1,141 @@
+<!--patient_detail.html-->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Деталі пацієнта</title>
+    <link rel="stylesheet" href="{% static 'users/patient_details.css' %}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const patientFullName = sessionStorage.getItem('patient_full_name');
+            const patientAge = sessionStorage.getItem('patient_age');
+            const patientGender = sessionStorage.getItem('patient_gender');
+            const patientDob = sessionStorage.getItem('patient_dob');
+            const patientLocation = sessionStorage.getItem('patient_location');
+            const patientWeight = sessionStorage.getItem('patient_weight');
+            const patientHeight = sessionStorage.getItem('patient_height');
+            const patientStatus = sessionStorage.getItem('patient_status');
+            const patientDevice = sessionStorage.getItem('patient_ip_device');
+            const patientHeartRate = sessionStorage.getItem('patient_heart_rate');
+            const patientBloodPressure = sessionStorage.getItem('patient_blood_pressure');
+            const patientSpO2 = sessionStorage.getItem('patient_spO2');
+            const patientGlucoseLevel = sessionStorage.getItem('patient_glucose_level');
+            const patientTemperature = sessionStorage.getItem('patient_temperature');
+
+            document.getElementById('patientFullName').textContent = patientFullName;
+            document.getElementById('patientAge').textContent = patientAge;
+            document.getElementById('patientGender').textContent = patientGender;
+            document.getElementById('patientDob').textContent = patientDob;
+            document.getElementById('patientLocation').textContent = patientLocation;
+            document.getElementById('patientWeight').textContent = patientWeight;
+            document.getElementById('patientHeight').textContent = patientHeight;
+            document.getElementById('patientStatus').textContent = patientStatus;
+            document.getElementById('patientDevice').textContent = patientDevice;
+            document.getElementById('patientHeartRate').textContent = patientHeartRate;
+            document.getElementById('patientBloodPressure').textContent = patientBloodPressure;
+            document.getElementById('patientSpO2').textContent = patientSpO2;
+            document.getElementById('patientGlucoseLevel').textContent = patientGlucoseLevel;
+            document.getElementById('patientTemperature').textContent = patientTemperature;
+
+            const statusElement = document.getElementById('patientStatus');
+            if (patientStatus === 'On') {
+                statusElement.classList.add('status-on');
+            } else {
+                statusElement.classList.add('status-off');
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const patientData = {
+                age: sessionStorage.getItem('patient_age'),
+                gender: sessionStorage.getItem('patient_gender') === 'Чоловік' ? 0 : 1,
+                weight: sessionStorage.getItem('patient_weight'),
+                height: sessionStorage.getItem('patient_height'),
+                heart_rate: sessionStorage.getItem('patient_heart_rate'),
+                blood_pressure: sessionStorage.getItem('patient_blood_pressure'),
+                spO2: sessionStorage.getItem('patient_spO2'),
+                glucose_level: sessionStorage.getItem('patient_glucose_level'),
+                temperature: sessionStorage.getItem('patient_temperature')
+            };
+    
+            fetch('/users/analyze_patient/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify(patientData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultsContainer = document.getElementById('analysis-results');
+                resultsContainer.innerHTML = '<h3>Результати аналізу захворювань:</h3><ul>';
+    
+                const diseaseNames = {
+                    'hypertension': 'Гіпертонія',
+                    'diabetes_type2': 'Діабет II типу',
+                    'cardiovascular_disease': 'Серцево-судинні захворювання',
+                    'pneumonia': 'Пневмонія',
+                    'arrhythmia': 'Аритмія',
+                    'metabolic_syndrome': 'Метаболічний синдром',
+                    'sleep_apnea': 'Апное сну',
+                    'hyperthyroidism': 'Гіпертиреоз',
+                    'hypothyroidism': 'Гіпотиреоз'
+                };
+    
+                for (let disease in data.predictions) {
+                    let prediction = data.predictions[disease].Prediction === 'Yes' ? 'Так' : 'Ні';
+                    let probability = parseFloat(data.predictions[disease].Probability).toFixed(2);
+                    let diseaseName = diseaseNames[disease] || disease;  // Получаем имя болезни на украинском
+    
+                    resultsContainer.innerHTML += `
+                        <li>
+                            <span class="disease-name">${diseaseName}:</span>
+                            <span class="prediction ${prediction === 'Так' ? 'positive' : 'negative'}">${prediction}</span>
+                            <span class="probability">Ризик: ${probability}</span>
+                        </li>`;
+                }
+                resultsContainer.innerHTML += '</ul>';
+            })
+            .catch(error => console.error('Ошибка:', error));
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Информация о пациенте -->
+        <div class="patient-details-container">
+            <h1>Деталі пацієнта</h1>
+            <div class="patient-info">
+                <p><strong>ПІБ:</strong> <span id="patientFullName"></span></p>
+                <p><strong>Вік:</strong> <span id="patientAge"></span></p>
+                <p><strong>Стать:</strong> <span id="patientGender"></span></p>
+                <p><strong>Дата народження:</strong> <span id="patientDob"></span></p>
+                <p><strong>Місце лікування:</strong> <span id="patientLocation"></span></p>
+                <p><strong>Вага:</strong> <span id="patientWeight"></span> кг</p>
+                <p><strong>Ріст:</strong> <span id="patientHeight"></span> см</p>
+                <p><strong>Статус:</strong> <span id="patientStatus"></span></p>
+                <p><strong>Адрес пристрою:</strong> <span id="patientDevice"></span></p>
+            </div>
+            <h1>Показники з пристрою</h1>
+            <div class="patient-info">
+                <p><strong>ЧСС:</strong> <span class="value" id="patientHeartRate"></span> уд/мин</p>
+                <p><strong>Артеріальний тиск:</strong> <span class="value" id="patientBloodPressure"></span> мм рт. ст.</p>
+                <p><strong>Насичення киснем (SpO2):</strong> <span class="value" id="patientSpO2"></span> %</p>
+                <p><strong>Рівень глюкози:</strong> <span class="value" id="patientGlucoseLevel"></span> ммоль/л</p>
+                <p><strong>Температура тіла:</strong> <span class="value" id="patientTemperature"></span> °C</p>
+            </div>
+            <a href="/users/login/" class="back-button">Назад до списку пацієнтів</a>
+        </div>
+
+        <!-- Результаты анализа заболеваний -->
+        <div class="analysis-results" id="analysis-results">
+            <!-- Результаты анализа будут добавлены сюда через JavaScript -->
+        </div>
+    </div>
+</body>
+</html>

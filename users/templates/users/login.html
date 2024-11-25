@@ -1,0 +1,69 @@
+<!-- login.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Головна сторінка</title>
+    <link rel="stylesheet" href="{% static 'users/styles.css' %}">
+</head>
+<body>
+    <!-- Приветствие пользователя -->
+    <header>
+        <h1>Ласкаво просимо, Пономаренко Іван Вікторович!</h1>
+        <button onclick="window.location.href='{% url 'users:add_patient' %}'">Добавити пацієнта</button>
+    </header>
+
+    <!-- Список пациентов -->
+    <section class="patients-list">
+        <h2>Список пацієнтів</h2>
+        {% if patients %}
+            {% for patient in patients %}
+            <div class="patient-card">
+                <img src="{% static 'users/patient_icon.png' %}" alt="Іконка пацієнта" class="patient-icon">
+                <div class="patient-info">
+                    <p><strong>ПІБ:</strong> {{ patient.full_name }}</p>
+                    <p><strong>Вік:</strong> {{ patient.age }}</p>
+                    <p><strong>Місце лікування:</strong> {{ patient.treatment_location }}</p>
+                    <p>
+                        <strong>Статус:</strong> 
+                        <span class="status {% if patient.status|lower == 'on' %}status-on{% else %}status-off{% endif %}">
+                            {{ patient.status }}
+                        </span>
+                    </p>
+                </div>
+                <button onclick="viewPatientDetails('{{ patient.id }}', '{{ patient.full_name }}', '{{ patient.age }}', '{{ patient.gender }}', '{{ patient.dob }}', '{{ patient.treatment_location }}', '{{ patient.weight }}', '{{ patient.height }}', '{{ patient.status }}', '{{ patient.ip_device }}', '{{ patient.heart_rate }}', '{{ patient.blood_pressure }}', '{{ patient.spO2 }}', '{{ patient.glucose_level }}', '{{ patient.temperature }}', )">Детальніше</button>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align: center;">Пацієнтів не знайдено</p>
+        {% endif %}
+    </section>
+
+    <!-- Определение функции вне цикла -->
+    <script>
+        function viewPatientDetails(id, fullName, age, gender, dob, location, weight, height, status, ip_device, heart_rate, blood_pressure, spO2, glucose_level, temperature) {
+            sessionStorage.setItem('patient_id', id);
+            sessionStorage.setItem('patient_full_name', fullName);
+            sessionStorage.setItem('patient_age', age);
+            sessionStorage.setItem('patient_gender', gender);
+            sessionStorage.setItem('patient_dob', dob);
+            sessionStorage.setItem('patient_location', location);
+            sessionStorage.setItem('patient_weight', weight);
+            sessionStorage.setItem('patient_height', height);
+            sessionStorage.setItem('patient_status', status);
+            sessionStorage.setItem('patient_ip_device', ip_device);
+            sessionStorage.setItem('patient_heart_rate', heart_rate);
+            sessionStorage.setItem('patient_blood_pressure', blood_pressure);
+            sessionStorage.setItem('patient_spO2', spO2);
+            sessionStorage.setItem('patient_glucose_level', glucose_level);
+            sessionStorage.setItem('patient_temperature', temperature);
+
+            // Перенаправление на страницу с деталями
+            window.location.href = '/users/patient/' + id + '/';
+        }
+    </script>
+
+</body>
+</html>

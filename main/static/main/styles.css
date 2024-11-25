@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f2f5;
+}
+
+.container {
+    width: 280px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+input[type="text"], input[type="password"], input[type="number"], input[type="date"], select {
+    width: 100%;
+    padding: 6px;
+    margin: 6px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin-bottom: 4px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.register-btn {
+    background-color: #007bff;
+}
+
+.register-btn:hover {
+    background-color: #0056b3;
+}
+
+#user-type-selection {
+    margin: 12px 0;
+}
+
+#patient-fields, #doctor-fields {
+    margin-top: 12px;
+}
+
+input[type="radio"] {
+    margin-right: 4px;
+}
+
+select {
+    width: 100%;
+    font-size: 14px;
+}
+
+#patient-fields label, #doctor-fields label {
+    font-weight: normal;
+    margin: 4px 0;
+}

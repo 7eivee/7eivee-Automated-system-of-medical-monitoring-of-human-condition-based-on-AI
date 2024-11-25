@@ -1,0 +1,95 @@
+/* Основные стили для страницы */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+.patient-details-container,
+.analysis-results {
+    background-color: #fff;
+    padding: 20px;
+    width: 450px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.patient-details-container h1,
+.analysis-results h3 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.patient-info {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.patient-info p,
+.analysis-results li {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background-color: #f7f8fa;
+    border-radius: 4px;
+}
+
+.disease-name {
+    font-weight: bold;
+}
+
+.prediction.positive {
+    color: green;
+}
+
+.prediction.negative {
+    color: red;
+}
+
+/* Статусы */
+.status-on {
+    color: green;
+    font-weight: bold;
+}
+
+.status-off {
+    color: red;
+    font-weight: bold;
+}
+
+/* Кнопка "Назад" */
+.back-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Выравнивание числовых значений по правому краю */
+.patient-info span.value {
+    text-align: end;
+    display: inline-block;
+    width: 180px; /* Установите подходящую ширину */
+}
